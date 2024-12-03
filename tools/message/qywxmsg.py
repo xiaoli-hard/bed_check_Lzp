@@ -131,9 +131,13 @@ def wecom_bot(title: str, content: str) -> None:
     if push_config.get("QYWX_ORIGIN"):
         origin = push_config.get("QYWX_ORIGIN")
 
+    hitoko_res = requests.get("https://v1.hitokoto.cn/").json()
+    hitoko_main = hitoko_res["hitoko"]
+    hitoko_from = hitoko_res["from"]
+
     url = f"{origin}/cgi-bin/webhook/send?key={push_config.get('QYWX_KEY')}"
     headers = {"Content-Type": "application/json;charset=utf-8"}
-    data = {"msgtype": "text", "text": {"content": f"{title}\n\n{content}"}}
+    data = {"msgtype": "text", "text": {"content": f"{title}\n\n{content}\n\n{hitoko_main}    ----{hitoko_from}"}}
     response = requests.post(
         url=url, data=json.dumps(data), headers=headers, timeout=15
     ).json()

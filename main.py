@@ -1,4 +1,6 @@
 import sys
+from datetime import datetime
+
 import execjs
 import base64
 import ddddocr
@@ -23,7 +25,7 @@ class CQ(feapder.AirSpider):
     def start_requests(self):
         log.info("开始执行")
         log.info(f"用户名：{USERNAME}")
-        self.send_msg("开始执行", level="INFO")
+        # self.send_msg("开始执行", level="DEBUG")
         code_url = "https://ids.gzist.edu.cn/lyuapServer/kaptcha"
         yield feapder.Request(url=code_url, callback=self.parse_tryLogin)
 
@@ -53,8 +55,7 @@ class CQ(feapder.AirSpider):
             elif data_code == 'PASSERROR':
                 raise self.InfoError(fr"密码错误")
             elif data_code == 'CODEFALSE':
-                raise self.CodeError(fr"验证码错误,尝试重新运行,{request.retry_times}", code=code,
-                                     code_result=code_result)
+                raise self.CodeError(fr"验证码错误,尝试重新运行,{request.retry_times}", code=code,code_result=code_result)
             elif data_code == 'ISMODIFYPASS':
                 raise self.InfoError(fr"密码未修改")
             elif data_code == 'ISPHONEOREMAILORANSWER':
@@ -94,12 +95,12 @@ class CQ(feapder.AirSpider):
             result = response.json["msg"]
             if result == ' 当前时段不在考勤时段内':
                 log.warning(f"::warning:: {result}")
-                self.send_msg(result, "INFO")
+                self.send_msg(result, "DEBUG")
                 return
             elif result == ' 您已签到,请勿重复签到':
                 pass
             log.info(fr"查寝结果：{result}")
-            self.send_msg(result, "INFO")
+            self.send_msg(result, "DEBUG")
         except Exception as e:
             log.error(f"::error:: 查寝失败，结果未知：{e}")
 
@@ -119,7 +120,8 @@ class CQ(feapder.AirSpider):
 
     @staticmethod
     def send_msg(msg, level="DEBUG", message_prefix=""):
-        msg = f"{USERNAME}\n{msg}"
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        msg = f"{USERNAME}\n{timestamp} - {msg}"
         send_msg(msg, level=level, message_prefix=message_prefix)
 
     # 识别验证码
@@ -159,7 +161,6 @@ class CQ(feapder.AirSpider):
         context1 = execjs.compile(self.js_from_file('./login.js'))
         encrypted_password = context1.call("encrypt", password)
         return encrypted_password
-
 
 def get_username_password_from_env():
     username = os.environ.get("LOGIN_USERNAME")
