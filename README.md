@@ -48,8 +48,9 @@
    }
    ```
    更多配置项请参考[setting.py](./setting.py)。
+  ``QYWX_KEY```的secret存储微信机器人key值
 
    ![secrets.png](./doc/secrets.png)
 
-2. 然后在仓库的Actions中手动运行，即可测试运行是否正常。
+3. 然后在仓库的Actions中手动运行，即可测试运行是否正常。
    ![action.png](./doc/action.png)
