@@ -1,3 +1,4 @@
+# main.py
 import sys
 import execjs
 import base64
@@ -7,8 +8,10 @@ import argparse
 from tools import send_msg
 
 from env import *
-from feapder.utils.log import log
+from custom_logger import CustomLogger  # 导入自定义日志记录器
 
+# 创建自定义日志记录器实例
+log = CustomLogger()
 
 class CQ(feapder.AirSpider):
     class InfoError(Exception):
@@ -21,8 +24,8 @@ class CQ(feapder.AirSpider):
             self.code_result = code_result
 
     def start_requests(self):
-        log.info("开始执行")
-        log.info(f"用户名：{USERNAME}")
+        log.log("INFO", "开始执行")
+        log.log("INFO", f"用户名：{USERNAME}")
         self.send_msg("开始执行", level="INFO")
         code_url = "https://ids.gzist.edu.cn/lyuapServer/kaptcha"
         yield feapder.Request(url=code_url, callback=self.parse_tryLogin)
@@ -35,7 +38,7 @@ class CQ(feapder.AirSpider):
             code_result = None
         else:
             code, code_result = self.code_ocr(code_base64_str)
-            log.info(f"验证码: {code};答案: {code_result}")
+            log.log("INFO", f"验证码: {code};答案: {code_result}")
         post_data = {
             "username": USERNAME,
             "password": self.encrypt_password(PASSWORD),
@@ -93,15 +96,15 @@ class CQ(feapder.AirSpider):
         try:
             result = response.json["msg"]
             if result == ' 当前时段不在考勤时段内':
-                log.warning(f"::warning:: {result}")
+                log.log("WARNING", f"::warning:: {result}")
                 self.send_msg(result, "INFO")
                 return
             elif result == ' 您已签到,请勿重复签到':
                 pass
-            log.info(fr"查寝结果：{result}")
+            log.log("INFO", fr"查寝结果：{result}")
             self.send_msg(result, "INFO")
         except Exception as e:
-            log.error(f"::error:: 查寝失败，结果未知：{e}")
+            log.log("ERROR", f"::error:: 查寝失败，结果未知：{e}")
 
     def exception_request(self, request, response, e: Exception):
         if type(e) is self.InfoError:
@@ -115,7 +118,7 @@ class CQ(feapder.AirSpider):
         elif type(e) is Exception:
             self.send_msg(f"发生未知错误：{e}", "ERROR")
 
-        log.error(f"::error:: {e}")
+        log.log("ERROR", f"::error:: {e}")
 
     @staticmethod
     def send_msg(msg, level="DEBUG", message_prefix=""):
@@ -160,12 +163,10 @@ class CQ(feapder.AirSpider):
         encrypted_password = context1.call("encrypt", password)
         return encrypted_password
 
-
 def get_username_password_from_env():
     username = os.environ.get("LOGIN_USERNAME")
     password = os.environ.get("LOGIN_PASSWORD")
     return username, password
-
 
 def get_username_password_from_config(config_file, section):
     config = configparser.ConfigParser()
@@ -177,12 +178,10 @@ def get_username_password_from_config(config_file, section):
     else:
         return None, None
 
-
 def get_username_password_manually():
     username = input("请输入用户名: ")
     password = input("请输入密码: ")
     return username, password
-
 
 def get_username_password():
     parser = argparse.ArgumentParser(description='获取用户名和密码')
@@ -203,14 +202,24 @@ def get_username_password():
     else:
         return get_username_password_manually()
 
+def send_all_logs(level="DEBUG"):
+    logs = log.get_logs()
+    combined_log = "\n".join(logs)
+    send_msg(combined_log, level=level)
 
 if __name__ == '__main__':
     USERNAME, PASSWORD = get_username_password()
     if USERNAME and PASSWORD:
-        CQ().start()
+        try:
+            CQ().start()
+            send_all_logs(level="INFO")
+        except Exception as e:
+            log.log("ERROR", f"任务执行过程中发生错误: {e}")
+            send_all_logs(level="ERROR")
     else:
         if not USERNAME:
-            log.error("::error:: 账号不能为空")
+            log.log("ERROR", "::error:: 账号不能为空")
         if not PASSWORD:
-            log.error("::error:: 密码不能为空")
+            log.log("ERROR", "::error:: 密码不能为空")
+        send_all_logs(level="ERROR")
         sys.exit(1)
