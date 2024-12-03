@@ -13,6 +13,9 @@ from custom_logger import CustomLogger  # 导入自定义日志记录器
 # 创建自定义日志记录器实例
 log = CustomLogger()
 
+# 禁用 feapder 的默认日志记录
+feapder.utils.log.logger.disabled = True
+
 class CQ(feapder.AirSpider):
     class InfoError(Exception):
         def __init__(self, *args, **kwargs):  # real signature unknown
@@ -56,8 +59,7 @@ class CQ(feapder.AirSpider):
             elif data_code == 'PASSERROR':
                 raise self.InfoError(fr"密码错误")
             elif data_code == 'CODEFALSE':
-                raise self.CodeError(fr"验证码错误,尝试重新运行,{request.retry_times}", code=code,
-                                     code_result=code_result)
+                raise self.CodeError(fr"验证码错误,尝试重新运行,{request.retry_times}", code=code,code_result=code_result)
             elif data_code == 'ISMODIFYPASS':
                 raise self.InfoError(fr"密码未修改")
             elif data_code == 'ISPHONEOREMAILORANSWER':
@@ -97,7 +99,7 @@ class CQ(feapder.AirSpider):
             result = response.json["msg"]
             if result == ' 当前时段不在考勤时段内':
                 log.log("WARNING", f"::warning:: {result}")
-                self.send_msg(result, "INFO")
+                self.send_msg(result, level="INFO")
                 return
             elif result == ' 您已签到,请勿重复签到':
                 pass
@@ -211,7 +213,8 @@ if __name__ == '__main__':
     USERNAME, PASSWORD = get_username_password()
     if USERNAME and PASSWORD:
         try:
-            CQ().start()
+            spider = CQ()
+            spider.start()
             send_all_logs(level="INFO")
         except Exception as e:
             log.log("ERROR", f"任务执行过程中发生错误: {e}")
