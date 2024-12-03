@@ -14,7 +14,7 @@ from custom_logger import CustomLogger  # 导入自定义日志记录器
 log = CustomLogger()
 
 # 禁用 feapder 的默认日志记录
-feapder.utils.log.logger.disabled = True
+# feapder.utils.log.logger.disabled = True
 
 class CQ(feapder.AirSpider):
     class InfoError(Exception):
