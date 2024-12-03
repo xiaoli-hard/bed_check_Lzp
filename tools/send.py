@@ -17,7 +17,7 @@ def send_msg(msg, level="DEBUG", message_prefix="", keyword=""):
         email_warning(msg, message_prefix=message_prefix, title=title)
 
     if setting.WECHAT_WARNING_URL:
-        wechat_warning(keyword + msg, message_prefix=message_prefix)
+        wecom_bot(keyword + msg, message_prefix=message_prefix)
 
     if setting.FEISHU_WARNING_URL:
         feishu_warning(keyword + msg, message_prefix=message_prefix)
