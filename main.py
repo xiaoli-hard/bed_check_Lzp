@@ -167,7 +167,6 @@ def get_username_password_from_env():
     password = os.environ.get("LOGIN_PASSWORD")
     return username, password
 
-
 def get_username_password_from_config(config_file, section):
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -178,12 +177,10 @@ def get_username_password_from_config(config_file, section):
     else:
         return None, None
 
-
 def get_username_password_manually():
     username = input("请输入用户名: ")
     password = input("请输入密码: ")
     return username, password
-
 
 def get_username_password():
     parser = argparse.ArgumentParser(description='获取用户名和密码')
