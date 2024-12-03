@@ -16,8 +16,8 @@ def send_msg(msg, level="DEBUG", message_prefix="", keyword=""):
             title = title[:50] + "..."
         email_warning(msg, message_prefix=message_prefix, title=title)
 
-    if setting.WECHAT_WARNING_URL:
-        wecom_bot(keyword + msg, message_prefix=message_prefix)
+    if setting.QYWX_KEY:
+        wecom_bot("可达鸭查寝版",keyword + msg)
 
     if setting.FEISHU_WARNING_URL:
         feishu_warning(keyword + msg, message_prefix=message_prefix)

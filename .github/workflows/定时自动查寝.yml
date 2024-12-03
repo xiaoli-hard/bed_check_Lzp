@@ -31,3 +31,4 @@ jobs:
         LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
         # 以下为可选参数，JSON格式一一对应所有参数
         SETTING_STRING: ${{ secrets.SETTING_STRING }}
+        QYWX_KEY: ${{ secrets.QYWX_KEY }}

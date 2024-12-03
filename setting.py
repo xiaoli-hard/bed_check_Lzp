@@ -155,6 +155,7 @@ SPIDER_MAX_RETRY_TIMES = 3  # 每个请求最大重试次数
 # EMAIL_SMTPSERVER = "smtp.163.com"  # 邮件服务器 默认为163邮箱
 # # 企业微信报警
 WECHAT_WARNING_URL = ""  # 企业微信机器人api
+QYWX_KEY = ""
 # WECHAT_WARNING_PHONE = ""  # 报警人 将会在群内@此人, 支持列表，可指定多人
 # WECHAT_WARNING_ALL = False  # 是否提示所有人， 默认为False
 # QMSG报警
