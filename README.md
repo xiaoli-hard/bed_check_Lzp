@@ -4,10 +4,13 @@
 
 这是一个用于[广州理工学院查寝](https://xsfw.gzist.edu.cn/xsfw/sys/swmzncqapp/*default/index.do)的脚本，可以搭配其他工具自动完成查寝任务。
 
+定时规则已经更改为22:01再开始action
+
 ## 使用方法
 
-> 账号密码是指[统一身份验证系统](https://ids.gzist.edu.cn/lyuapServer/login)的账号密码，账号为```学号```
-> ，默认密码为```身份证后六位```
+> 账号密码是指[统一身份验证系统](https://ids.gzist.edu.cn/lyuapServer/login)的账号密码
+> , 账号为```学号```
+> , 默认密码为 ```身份证后六位```
 
 > ⚠️ **警告**: 使用此脚本前必须修改默认的密码。
 
@@ -35,6 +38,8 @@
 
 1. 先fork本仓库，然后在仓库的Settings->Secrets中添加名为```LOGIN_USERNAME```和```LOGIN_PASSWORD```的secret，分别存储用户名和密码。
 
+   ```QYWX_KEY```的secret存储微信机器人key值
+
    ```SETTING_STRING```的secret用于存储json格式的查寝配置文件，格式如下：
    ```json
    {
@@ -48,7 +53,6 @@
    }
    ```
    更多配置项请参考[setting.py](./setting.py)。
-  ``QYWX_KEY```的secret存储微信机器人key值
 
    ![secrets.png](./doc/secrets.png)
 
