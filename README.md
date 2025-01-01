@@ -1,5 +1,10 @@
 # 广州理工学院 查寝脚本
 
+# Warning
+
+统一身份认证平台已添加手机验证码二步验证 此查寝方法暂时失效!!!
+
+
 ## 介绍
 
 这是一个用于[广州理工学院查寝](https://xsfw.gzist.edu.cn/xsfw/sys/swmzncqapp/*default/index.do)的脚本，可以搭配其他工具自动完成查寝任务。
