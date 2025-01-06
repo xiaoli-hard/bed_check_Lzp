@@ -2,7 +2,7 @@
 
 # Warning
 
-统一身份认证平台已添加手机验证码二步验证 此查寝方法暂时失效!!!
+如果跳转二步验证则去[二步验证设置](https://ids.gzist.edu.cn/cas2/#/security/securitySetting/verify)去除学工系统的二步验证 
 
 
 ## 介绍
