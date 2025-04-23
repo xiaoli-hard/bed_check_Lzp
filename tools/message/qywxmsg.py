@@ -5,6 +5,10 @@ from tools.notify import push_config
 import json
 import os
 import threading
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+from email.utils import formataddr
 
 import requests
 
@@ -147,3 +151,54 @@ def wecom_bot(title: str, content: str) -> None:
         print("企业微信机器人推送成功!")
     else:
         print("企业微信机器人推送失败!")
+
+def smtp_gyqq(title: str, content: str) -> None:
+    """
+    使用 SMTP 邮件 推送消息。
+    """
+    if (
+        not push_config.get("SMTP_SERVER")
+        or not push_config.get("SMTP_SSL")
+        or not push_config.get("SMTP_EMAIL")
+        or not push_config.get("SMTP_PASSWORD")
+        or not push_config.get("SMTP_NAME")
+    ):
+        print(
+            "SMTP 邮件 的 SMTP_SERVER 或者 SMTP_SSL 或者 SMTP_EMAIL 或者 SMTP_PASSWORD 或者 SMTP_NAME 未设置!!\n取消推送"
+        )
+        return
+    print("SMTP 邮件 服务启动")
+
+    message = MIMEText(content, "plain", "utf-8")
+    message["From"] = formataddr(
+        (
+            Header(push_config.get("SMTP_NAME"), "utf-8").encode(),
+            push_config.get("SMTP_EMAIL"),
+        )
+    )
+    message["To"] = formataddr(
+        (
+            Header(push_config.get("SMTP_NAME"), "utf-8").encode(),
+            push_config.get("SMTP_EMAIL"),
+        )
+    )
+    message["Subject"] = Header(title, "utf-8")
+
+    try:
+        smtp_server = (
+            smtplib.SMTP_SSL(push_config.get("SMTP_SERVER"))
+            if push_config.get("SMTP_SSL") == "true"
+            else smtplib.SMTP(push_config.get("SMTP_SERVER"))
+        )
+        smtp_server.login(
+            push_config.get("SMTP_EMAIL"), push_config.get("SMTP_PASSWORD")
+        )
+        smtp_server.sendmail(
+            push_config.get("SMTP_EMAIL"),
+            push_config.get("SMTP_EMAIL"),
+            message.as_bytes(),
+        )
+        smtp_server.close()
+        print("SMTP 邮件 推送成功！")
+    except Exception as e:
+        print(f"SMTP 邮件 推送失败！{e}")

@@ -1,5 +1,6 @@
 from feapder.utils.tools import *
 from tools.message import *
+from tools.message.qywxmsg import smtp_gyqq
 
 
 def send_msg(msg, level="DEBUG", message_prefix="", keyword=""):
@@ -18,6 +19,9 @@ def send_msg(msg, level="DEBUG", message_prefix="", keyword=""):
 
     if setting.QYWX_KEY:
         wecom_bot("可达鸭查寝版",keyword + msg)
+
+    if setting.EMAIL_PASSWORD:
+        smtp_gyqq("gzist爱查寝",keyword + msg)
 
     if setting.FEISHU_WARNING_URL:
         feishu_warning(keyword + msg, message_prefix=message_prefix)

@@ -6,7 +6,7 @@ on:
       # https://docs.github.com/zh/actions/using-workflows/events-that-trigger-workflows#schedule
       # github action的延迟有点高 所以等吧
       # 22:01签到成功
-      - cron : '59 13 * * *'
+      - cron : '58 13 * * *'
   workflow_dispatch:
 permissions:
   contents: read
@@ -34,3 +34,8 @@ jobs:
         # 以下为可选参数，JSON格式一一对应所有参数
         SETTING_STRING: ${{ secrets.SETTING_STRING }}
         QYWX_KEY: ${{ secrets.QYWX_KEY }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_SSL: ${{ secrets.SMTP_SSL }}
+        SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_NAME: ${{ secrets.SMTP_NAME }}
