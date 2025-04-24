@@ -6,7 +6,7 @@ on:
       # https://docs.github.com/zh/actions/using-workflows/events-that-trigger-workflows#schedule
       # github action的延迟有点高 所以等吧
       # 22:01签到成功
-      - cron : '58 13 * * *'
+      - cron : '59 13 * * *'
   workflow_dispatch:
 permissions:
   contents: read
