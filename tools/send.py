@@ -17,9 +17,9 @@ def send_msg(msg, level="DEBUG", message_prefix="", keyword=""):
             title = title[:50] + "..."
         email_warning(msg, message_prefix=message_prefix, title=title)
 
-    if setting.QYWX_KEY or setting.EMAIL_PASSWORD:
-        wecom_bot("可达鸭查寝版",keyword + msg)
-        smtp_gyqq("gzist爱查寝", keyword + msg)
+    # if setting.QYWX_KEY or setting.EMAIL_PASSWORD:
+    #     wecom_bot("可达鸭查寝版",keyword + msg)
+    #     smtp_gyqq("gzist爱查寝", keyword + msg)
 
     if setting.EMAIL_PASSWORD:
         smtp_gyqq("gzist爱查寝",keyword + msg)
